@@ -57,6 +57,7 @@ app.get('/api/notes', (request, response) => {
     response.json(notes)
   })
 })
+// the result of promise returned by find() is an array containing all document objects that fulfilled the confitions
 
 app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id)

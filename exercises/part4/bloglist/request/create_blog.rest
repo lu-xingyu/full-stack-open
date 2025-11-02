@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Good Luck Teddy",
+    "author": "Teddy Duncan",
+    "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
+    "likes": 120
+}
