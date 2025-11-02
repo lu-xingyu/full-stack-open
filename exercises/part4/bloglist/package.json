@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \\\"Error: no test specified\\\" && exit 1",
+    "test": "node --test",
     "dev": "node --watch index.js"
   },
   "author": "Xingyu Lu",
@@ -12,6 +12,7 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "lodash": "^4.17.21",
     "mongoose": "^8.19.2"
   },
   "devDependencies": {
