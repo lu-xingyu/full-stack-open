@@ -64,7 +64,9 @@ test('if the likes property is missing, it will default to the value 0', async (
     assert.strictEqual(addedBlog.likes, 0)
 })
 
-test('if the likes property is missing, it will default to the value 0', async () => {
+test('if the title or url properties are missing, responds with 400 Bad Request', async () => {
+    const beforeBlogs = await blogsInDb()
+
     const postToAdd = {
         "title": "Good Luck Teddy",
         "author": "Teddy Duncan",
@@ -84,6 +86,34 @@ test('if the likes property is missing, it will default to the value 0', async (
     await api.post('/api/blogs')
              .send(postToAdd2)
              .expect(400)
+
+    const afterBlogs = await blogsInDb()
+
+    assert.strictEqual(beforeBlogs.length, afterBlogs.length)
+})
+
+test('deleting a single blog', async () =>{
+    const blogsBefore = await blogsInDb()
+    const blogToDelete = blogsBefore[0]
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+    const blogsAfter = await blogsInDb()
+    const IdsAfter = blogsAfter.map(blog => blog.id)
+    assert.strictEqual(blogsBefore.length, blogsAfter.length + 1)
+    assert(!IdsAfter.includes(blogToDelete.id))
+})
+
+test('updating the information of an individual blog post', async () => {
+    const blogsBefore = await blogsInDb()
+    const blogToUpdate = blogsBefore[0]
+    const id = blogToUpdate.id
+    const likesBefore = blogToUpdate.likes
+    const newBlog = {...blogToUpdate, likes: likesBefore + 35}
+
+    await api.put(`/api/blogs/${id}`).send(newBlog)
+    const blogsAfter = await blogsInDb()
+    const updatedBlog = blogsAfter.find(blog => blog.id === id)
+    
+    assert.strictEqual(updatedBlog.likes, likesBefore + 35)
 })
 
 after(async () => {
