@@ -1,10 +1,10 @@
 POST https://didactic-halibut-q7pxpr6qv64g346j7-3001.app.github.dev/api/notes
 Content-Type: application/json
+Authorization: Bearer 
 
 {
-    "content": "This note should have user",
-    "important": true,
-    "userId": "690b1f6b831d5e7bf3b5576d"
+    "content": "The last move of Ted is touching",
+    "important": false
 }
 
 // No empty line between Request and Header(Content-Type)

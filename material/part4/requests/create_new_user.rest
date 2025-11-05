@@ -2,7 +2,7 @@ POST https://didactic-halibut-q7pxpr6qv64g346j7-3001.app.github.dev/api/users
 Content-Type: application/json
 
 {
-    "username": "root",
-    "name": "Superuser",
-    "password": "salainen"
+    "username": "Barney",
+    "name": "Stinsen",
+    "password": "Roban"
 }
