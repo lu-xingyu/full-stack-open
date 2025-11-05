@@ -1,9 +1,10 @@
-POST http://localhost:3001/api/notes
+POST https://didactic-halibut-q7pxpr6qv64g346j7-3001.app.github.dev/api/notes
 Content-Type: application/json
 
 {
-    "content": "En",
-    "important": true
+    "content": "This note should have user",
+    "important": true,
+    "userId": "690b1f6b831d5e7bf3b5576d"
 }
 
 // No empty line between Request and Header(Content-Type)
