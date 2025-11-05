@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     passwordHash: String,
     notes: [
         {
-            type:mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Note'
         }  // define the constraints for the element in the notes array 
     ]
