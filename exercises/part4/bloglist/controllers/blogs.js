@@ -2,24 +2,34 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user')
   response.json(blogs)
 })
 
 blogsRouter.post('/', async (request, response) => {
+  const user = request.user
   const finalLikes = request.body.likes || 0
-  const blogToAdd = {...request.body, likes: finalLikes}
+  const blogToAdd = {...request.body, likes: finalLikes, user: user.id}
   if (!blogToAdd.title || !blogToAdd.url) {
     return response.status(400).end()
   }
 
   const blog = new Blog(blogToAdd)
-  const result = await blog.save()
-  response.status(201).json(result)
+  const savedBlog = await blog.save()
+
+  user.blogs = user.blogs.concat(savedBlog.id)
+  await user.save()
+
+  response.status(201).json(savedBlog)
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndDelete(request.params.id)
+  const blog = await Blog.findById(request.params.id)
+  const user = request.user
+  if (user._id !== blog.user) {
+    return response.status(401).json({error: "use is not permitted to delete this blog"})
+  }
+  await Blog.deleteOne({_id: request.params.id})
   response.status(204).end()
 })
 

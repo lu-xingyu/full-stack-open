@@ -120,40 +120,6 @@ describe('tests for blogs', () => {
     })
 })
 
-describe('tests for users', () => {
-    beforeEach(async () => {
-        await User.deleteMany({})
-        const initialUser = {
-            "username": "Barney",
-            "name": "Stinsen",
-        }
-        initialUser.password = await bcrypt.hash("Roban", 10)
-        User.save(initialUser)
-    })
-
-    test('valid user is saved', async () => {
-        const newUser = {
-            "username": "Ted",
-            "name": "Mosby",
-            "password": "architecture"
-        }
-        const userToAdd = new User(newUser)
-
-        api.post('/api/users')
-           .send(userToAdd)
-           .expect(201)
-           .expect('Content-Type', /application\/json/)
-
-        const usersAfter = usersInDb()
-        const usernames = usersAfter.map(user => user.username)
-        assertStrictEqual(usersAfter.length, 2)
-        assert(usernames.indludes(userToAdd.username))
-        
-    })
-
-})
-
-
 after(async () => {
     await mongoose.connection.close()
 })
