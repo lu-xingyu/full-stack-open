@@ -1,15 +1,16 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user')
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/',  middleware.tokenExtractor, async (request, response) => {
   const user = request.user
   const finalLikes = request.body.likes || 0
-  const blogToAdd = {...request.body, likes: finalLikes, user: user.id}
+  const blogToAdd = {...request.body, likes: finalLikes, user: user._id}
   if (!blogToAdd.title || !blogToAdd.url) {
     return response.status(400).end()
   }
@@ -23,17 +24,24 @@ blogsRouter.post('/', async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', middleware.tokenExtractor, async (request, response) => {
   const blog = await Blog.findById(request.params.id)
   const user = request.user
-  if (user._id !== blog.user) {
-    return response.status(401).json({error: "use is not permitted to delete this blog"})
+
+  if (blog.user.toString() !== user._id.toString()) {
+    return response.status(401).json({error: "user is not permitted to delete this blog"})
   }
-  await Blog.deleteOne({_id: request.params.id})
+
+  await Blog.findByIdAndDelete(request.params.id)
   response.status(204).end()
 })
 
-blogsRouter.put('/:id', async (request, response) => {
+blogsRouter.put('/:id',  middleware.tokenExtractor, async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  const user = request.user
+  if (blog.user.toString() !== user._id.toString()) {
+    return response.status(401).json({error: "use is not permitted to delete this blog"})
+  }
   const {title, author, url, likes} = request.body
   const blogToUpdate = await Blog.findById(request.params.id)
   if (!blogToUpdate) {
@@ -44,7 +52,7 @@ blogsRouter.put('/:id', async (request, response) => {
   blogToUpdate.url = url
   blogToUpdate.likes = likes
   const updatedBlog = await blogToUpdate.save()
-  response.json(updatedBlog)
+  response.status(200).json(updatedBlog)
 })
 
 module.exports = blogsRouter

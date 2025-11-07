@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 const errorHandler = (error, request, response, next) => {
     if (error.name === 'MongoServerError' && error.message.includes('E11000 duplicate key error')) {
@@ -6,26 +7,27 @@ const errorHandler = (error, request, response, next) => {
     } else if (error.name === 'ValidationError') {
         return response.status(400).json({error: error.message})
     } else {
-        console.log("unknown error")
+        console.log(error.message)
     }
 }
 
-const tokenExtractor = (request, response, next) => {
+const tokenExtractor = async (request, response, next) => {
     const authorization = request.get('authorization')
-    if (authorization && authorization.startsWith('Bearer ')) {
-        const token = authorization.replace('Bearer ', '')
+    
+    if (authorization && authorization.startsWith('Bear ')) {
+        const token = authorization.replace('Bear ', '')
         const decodedToken = jwt.verify(token, process.env.SECRET)
         if (!decodedToken) {
             return response.status(401).json({error: "token invalid"})
         }
-        const user = User.findById(decodedToken.id)
+        const user = await User.findById(decodedToken.id)
         if (!user) {
-            response.status(404).json({error: "user not found"})
+            return response.status(404).json({error: "user not found"})
         }
-        return request.user = user
+        request.user = user
+        return next()
     }
     response.status(400).json({error: "must provide token"})
-    next()
 }
 
 module.exports = {errorHandler, tokenExtractor}

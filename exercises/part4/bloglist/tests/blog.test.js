@@ -19,104 +19,209 @@ describe('tests for blogs', () => {
         }
     })
 
-    test('returns the correct amount of blog posts in the JSON format', async () => {
-        const response = await api.get('/api/blogs').expect('Content-Type', /application\/json/)
-        assert.strictEqual(response.body.length, 6)
+    describe('test for get blogs', () => {
+        test('returns the correct amount of blog posts in the JSON format', async () => {
+            const response = await api.get('/api/blogs').expect('Content-Type', /application\/json/)
+            assert.strictEqual(response.body.length, 6)
+        })
+
+        test('the unique identifier property of the blog posts is named id', async () => {
+            const response = await api.get('/api/blogs')
+            const keys = Object.keys(response.body[0])
+            assert(keys.includes('id'))
+        })
     })
 
-    test('the unique identifier property of the blog posts is named id', async () => {
-        const response = await api.get('/api/blogs')
-        const keys = Object.keys(response.body[0])
-        assert(keys.includes('id'))
-    })
+    describe('tests with login post and delete', () => {
+        let loginToken
+        let otherLoginToken
+        beforeEach(async () => {
+            await User.deleteMany({})
+            passwordTosave = await bcrypt.hash("Roban", 10)
+            const initialUser = {
+                username: "Barney",
+                name: "Stinsen",
+                passwordHash: passwordTosave 
+            }
+            const sideUser = {
+                username: "Malshow",
+                name: "Erekson",
+                passwordHash: await bcrypt.hash("Lily", 10)
+            }
+            const user = new User(initialUser)
+            await user.save()
+            const loginUser = {
+                username: "Barney",
+                password: "Roban"
+            }
+            const loginData = await api.post('/api/login').send(loginUser)
+            loginToken = loginData.body.token
 
-    test('successfully creates a new blog post', async () => {
-        const postToAdd = {
-            "title": "Good Luck Teddy",
-            "author": "Teddy Duncan",
-            "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
-            "likes": 120
-        }
-        const originalLen = initialBlogs.length
-        await api.post('/api/blogs')
-                .send(postToAdd)
-                .expect(201)
-                .expect('Content-Type', /application\/json/)
+            const user2 = new User(sideUser)
+            await user2.save()
+            const loginUser2 = {
+                username: "Malshow",
+                password: "Lily"
+            }
 
-        const currentBlogs = await blogsInDb()
-        const currentTitles = currentBlogs.map((blog) => blog.title)
+            const loginData2 = await api.post('/api/login').send(loginUser2)
+            otherLoginToken = loginData2.body.token
+        })
 
-        assert.strictEqual(originalLen + 1, currentTitles.length)
-        assert(currentTitles.includes(postToAdd.title))
-    })
+        test('successfully creates a new blog post', async () => {
+            const postToAdd = {
+                "title": "Good Luck Teddy",
+                "author": "Teddy Duncan",
+                "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
+                "likes": 120
+            }
+            const originalLen = initialBlogs.length
+            await api.post('/api/blogs')
+                    .send(postToAdd)
+                    .set('Authorization', `Bear ${loginToken}`)
+                    .expect(201)
+                    .expect('Content-Type', /application\/json/)
 
-    test('if the likes property is missing, it will default to the value 0', async () => {
-        const postToAdd = {
-            "title": "Good Luck Teddy",
-            "author": "Teddy Duncan",
-            "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
-        }
+            const currentBlogs = await blogsInDb()
+            const currentTitles = currentBlogs.map((blog) => blog.title)
 
-        const response = await api.post('/api/blogs')
-                .send(postToAdd)
-        const id = response.body.id
+            assert.strictEqual(originalLen + 1, currentTitles.length)
+            assert(currentTitles.includes(postToAdd.title))
+        })
 
-        const currentBlogs = await blogsInDb()
-        const addedBlog = currentBlogs.find(b => b.id === id)
+        test('if the likes property is missing, it will default to the value 0', async () => {
+            
+            const postToAdd = {
+                "title": "Good Luck Teddy",
+                "author": "Teddy Duncan",
+                "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
+            }
 
-        assert.strictEqual(addedBlog.likes, 0)
-    })
+            const response = await api.post('/api/blogs')
+                    .send(postToAdd)
+                    .set('authorization', `Bear ${loginToken}`)
+                    .expect(201)
+                    .expect('Content-Type', /application\/json/)
+            const id = response.body.id
 
-    test('if the title or url properties are missing, responds with 400 Bad Request', async () => {
-        const beforeBlogs = await blogsInDb()
+            const currentBlogs = await blogsInDb()
+            const addedBlog = currentBlogs.find(b => b.id === id)
 
-        const postToAdd = {
-            "title": "Good Luck Teddy",
-            "author": "Teddy Duncan",
-            "likes": 120
-        }
+            assert.strictEqual(addedBlog.likes, 0)
+        })
 
-        await api.post('/api/blogs')
-                .send(postToAdd)
-                .expect(400)
 
-        const postToAdd2 = {
-            "author": "Teddy Duncan",
-            "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
-            "likes": 120
-        }
+        test('if the title or url properties are missing, responds with 400 Bad Request', async () => {
+            const beforeBlogs = await blogsInDb()
 
-        await api.post('/api/blogs')
-                .send(postToAdd2)
-                .expect(400)
+            const postToAdd = {
+                "title": "Good Luck Teddy",
+                "author": "Teddy Duncan",
+                "likes": 120
+            }
 
-        const afterBlogs = await blogsInDb()
+            await api.post('/api/blogs')
+                    .send(postToAdd)
+                    .set('authorization', `Bear ${loginToken}`)
+                    .expect(400)
 
-        assert.strictEqual(beforeBlogs.length, afterBlogs.length)
-    })
+            const postToAdd2 = {
+                "author": "Teddy Duncan",
+                "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
+                "likes": 120
+            }
 
-    test('deleting a single blog', async () =>{
-        const blogsBefore = await blogsInDb()
-        const blogToDelete = blogsBefore[0]
-        await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
-        const blogsAfter = await blogsInDb()
-        const IdsAfter = blogsAfter.map(blog => blog.id)
-        assert.strictEqual(blogsBefore.length, blogsAfter.length + 1)
-        assert(!IdsAfter.includes(blogToDelete.id))
-    })
+            await api.post('/api/blogs')
+                    .send(postToAdd2)
+                    .set('authorization', `Bear ${loginToken}`)
+                    .expect(400)
 
-    test('updating the information of an individual blog post', async () => {
-        const blogsBefore = await blogsInDb()
-        const blogToUpdate = blogsBefore[0]
-        const id = blogToUpdate.id
-        const likesBefore = blogToUpdate.likes
-        const newBlog = {...blogToUpdate, likes: likesBefore + 35}
+            const afterBlogs = await blogsInDb()
 
-        await api.put(`/api/blogs/${id}`).send(newBlog)
-        const blogsAfter = await blogsInDb()
-        const updatedBlog = blogsAfter.find(blog => blog.id === id)
-        
-        assert.strictEqual(updatedBlog.likes, likesBefore + 35)
+            assert.strictEqual(beforeBlogs.length, afterBlogs.length)
+        })
+
+        test('deleting a single blog', async () =>{
+            const postToAdd = {
+                "title": "Good Luck Teddy",
+                "author": "Teddy Duncan",
+                "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
+                "likes": 120
+            }
+
+            await api.post('/api/blogs')
+                    .send(postToAdd)
+                    .set('Authorization', `Bear ${loginToken}`)
+                    .expect(201)
+                    .expect('Content-Type', /application\/json/)
+
+            const blogsBefore = await blogsInDb()
+            const blogToDelete = await Blog.findOne({title: "Good Luck Teddy", "author": "Teddy Duncan", url: "https://disney.fandom.com/wiki/Teddy_Duncan"})
+            const id = blogToDelete._id.toString()
+
+            const blogsBefore2 = await blogsInDb()
+            await api
+                    .delete(`/api/blogs/${id}`)
+                    .set('Authorization', `Bear ${otherLoginToken}`)
+                    .expect(401)
+                    .expect(response => response.body.error.includes("user is not permitted to delete this blog"))
+            const blogsAfter2 = await blogsInDb() 
+            assert.strictEqual(blogsBefore2.length, blogsAfter2.length) 
+
+            await api
+                    .delete(`/api/blogs/${id}`)
+                    .set('Authorization', `Bear ${loginToken}`)
+                    .expect(204)
+                    
+            const blogsAfter = await blogsInDb()
+            const IdsAfter = blogsAfter.map(blog => blog.id)
+            assert.strictEqual(blogsBefore.length, blogsAfter.length + 1)
+            assert(!IdsAfter.includes(blogToDelete.id))
+        })
+
+        test('updating the information of an individual blog post', async () => {
+            const postToAdd = {
+                "title": "Good Luck Teddy",
+                "author": "Teddy Duncan",
+                "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
+                "likes": 120
+            }
+
+            await api.post('/api/blogs')
+                    .send(postToAdd)
+                    .set('Authorization', `Bear ${loginToken}`)
+                    .expect(201)
+                    .expect('Content-Type', /application\/json/)
+
+            const blogToUpdate = await Blog.findOne({title: "Good Luck Teddy", "author": "Teddy Duncan", url: "https://disney.fandom.com/wiki/Teddy_Duncan"})
+
+            const id = blogToUpdate._id.toString()
+            const likesBefore = blogToUpdate.likes
+            const newBlog = {...blogToUpdate, likes: likesBefore + 35}
+
+
+            await api
+                    .put(`/api/blogs/${id}`)
+                    .send(newBlog)
+                    .expect(400)
+                    .expect(response => response.body.error.includes("must provide token"))
+
+            const blogsAfter2 = await blogsInDb()
+            const updatedBlog2 = blogsAfter2.find(blog => blog.id === id)
+            
+            assert.strictEqual(updatedBlog2.likes, likesBefore)
+
+
+            await api
+                    .put(`/api/blogs/${id}`)
+                    .send(newBlog)
+                    .set('Authorization', `Bear ${loginToken}`)
+                    .expect(200)
+            const blogsAfter = await blogsInDb()
+            const updatedBlog = blogsAfter.find(blog => blog.id === id)
+            
+            assert.strictEqual(updatedBlog.likes, likesBefore + 35)
+        })
     })
 })
 
