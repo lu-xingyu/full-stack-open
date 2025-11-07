@@ -1,0 +1,19 @@
+###
+POST https://didactic-halibut-q7pxpr6qv64g346j7-3001.app.github.dev/api/users
+Content-Type: application/json
+
+{
+    "username": "devil child",
+    "name": "Gabel",
+    "password": "adventureland"
+}
+
+###
+POST https://didactic-halibut-q7pxpr6qv64g346j7-3001.app.github.dev/api/users
+Content-Type: application/json
+
+{
+    "username": "goody goody",
+    "name": "Teddy",
+    "password": "goodluck"
+}

@@ -3,7 +3,7 @@ const Blog = require('../models/blog')
 const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user')
+  const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
   response.json(blogs)
 })
 

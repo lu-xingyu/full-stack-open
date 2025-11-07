@@ -1,9 +1,24 @@
-POST http://localhost:3003/api/blogs
+
+###
+POST https://didactic-halibut-q7pxpr6qv64g346j7-3001.app.github.dev/api/blogs
 Content-Type: application/json
+Authorization: Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldmlsIGNoaWxkIiwiaWQiOiI2OTBlMTZkMzgzZmM2ZDcwN2YzNGE3ZDEiLCJpYXQiOjE3NjI1MzEwNjV9.fFv0F0VILAXMotXqMPKzsIdKVe6sfn2UfO8oy6WJfm0
 
 {
-    "title": "Good Luck Teddy",
+    "title": "I want my own room",
+    "author": "Gabel Duncan",
+    "url": "https://disney.fandom.com/wiki/Gabel_Duncan",
+    "likes": 67
+}
+
+###
+POST https://didactic-halibut-q7pxpr6qv64g346j7-3001.app.github.dev/api/blogs
+Content-Type: application/json
+Authorization: Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imdvb2R5IGdvb2R5IiwiaWQiOiI2OTBlMTliNmUxZGMzM2QwYzE0NzQ3OTkiLCJpYXQiOjE3NjI1MzE4MDB9.7B54mbhRwYdsltSHN0CnhdUMfk8MpEmag3wOpMC1Zqo
+
+{
+    "title": "Good Luck Charlie",
     "author": "Teddy Duncan",
     "url": "https://disney.fandom.com/wiki/Teddy_Duncan",
-    "likes": 120
+    "likes": 89
 }

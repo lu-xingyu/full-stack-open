@@ -1,0 +1,5 @@
+DELETE https://didactic-halibut-q7pxpr6qv64g346j7-3001.app.github.dev/api/blogs/690e17eb83fc6d707f34a7da
+Content-Type: application/json
+Authorization: Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldmlsIGNoaWxkIiwiaWQiOiI2OTBlMTZkMzgzZmM2ZDcwN2YzNGE3ZDEiLCJpYXQiOjE3NjI1MzEwNjV9.fFv0F0VILAXMotXqMPKzsIdKVe6sfn2UfO8oy6WJfm0
+
+
