@@ -78,7 +78,7 @@ describe('tests for blogs', () => {
             const originalLen = initialBlogs.length
             await api.post('/api/blogs')
                     .send(postToAdd)
-                    .set('Authorization', `Bear ${loginToken}`)
+                    .set('Authorization', `Bearer ${loginToken}`)
                     .expect(201)
                     .expect('Content-Type', /application\/json/)
 
@@ -99,7 +99,7 @@ describe('tests for blogs', () => {
 
             const response = await api.post('/api/blogs')
                     .send(postToAdd)
-                    .set('authorization', `Bear ${loginToken}`)
+                    .set('authorization', `Bearer ${loginToken}`)
                     .expect(201)
                     .expect('Content-Type', /application\/json/)
             const id = response.body.id
@@ -122,7 +122,7 @@ describe('tests for blogs', () => {
 
             await api.post('/api/blogs')
                     .send(postToAdd)
-                    .set('authorization', `Bear ${loginToken}`)
+                    .set('authorization', `Bearer ${loginToken}`)
                     .expect(400)
 
             const postToAdd2 = {
@@ -133,7 +133,7 @@ describe('tests for blogs', () => {
 
             await api.post('/api/blogs')
                     .send(postToAdd2)
-                    .set('authorization', `Bear ${loginToken}`)
+                    .set('authorization', `Bearer ${loginToken}`)
                     .expect(400)
 
             const afterBlogs = await blogsInDb()
@@ -151,7 +151,7 @@ describe('tests for blogs', () => {
 
             await api.post('/api/blogs')
                     .send(postToAdd)
-                    .set('Authorization', `Bear ${loginToken}`)
+                    .set('Authorization', `Bearer ${loginToken}`)
                     .expect(201)
                     .expect('Content-Type', /application\/json/)
 
@@ -162,7 +162,7 @@ describe('tests for blogs', () => {
             const blogsBefore2 = await blogsInDb()
             await api
                     .delete(`/api/blogs/${id}`)
-                    .set('Authorization', `Bear ${otherLoginToken}`)
+                    .set('Authorization', `Bearer ${otherLoginToken}`)
                     .expect(401)
                     .expect(response => response.body.error.includes("user is not permitted to delete this blog"))
             const blogsAfter2 = await blogsInDb() 
@@ -170,7 +170,7 @@ describe('tests for blogs', () => {
 
             await api
                     .delete(`/api/blogs/${id}`)
-                    .set('Authorization', `Bear ${loginToken}`)
+                    .set('Authorization', `Bearer ${loginToken}`)
                     .expect(204)
                     
             const blogsAfter = await blogsInDb()
@@ -189,7 +189,7 @@ describe('tests for blogs', () => {
 
             await api.post('/api/blogs')
                     .send(postToAdd)
-                    .set('Authorization', `Bear ${loginToken}`)
+                    .set('Authorization', `Bearer ${loginToken}`)
                     .expect(201)
                     .expect('Content-Type', /application\/json/)
 
@@ -215,7 +215,7 @@ describe('tests for blogs', () => {
             await api
                     .put(`/api/blogs/${id}`)
                     .send(newBlog)
-                    .set('Authorization', `Bear ${loginToken}`)
+                    .set('Authorization', `Bearer ${loginToken}`)
                     .expect(200)
             const blogsAfter = await blogsInDb()
             const updatedBlog = blogsAfter.find(blog => blog.id === id)

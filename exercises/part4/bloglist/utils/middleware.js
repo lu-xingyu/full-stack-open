@@ -14,8 +14,8 @@ const errorHandler = (error, request, response, next) => {
 const tokenExtractor = async (request, response, next) => {
     const authorization = request.get('authorization')
     
-    if (authorization && authorization.startsWith('Bear ')) {
-        const token = authorization.replace('Bear ', '')
+    if (authorization && authorization.startsWith('Bearer ')) {
+        const token = authorization.replace('Bearer ', '')
         const decodedToken = jwt.verify(token, process.env.SECRET)
         if (!decodedToken) {
             return response.status(401).json({error: "token invalid"})
