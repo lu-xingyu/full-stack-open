@@ -1,21 +1,23 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useState, useEffect, useRef } from 'react'
 import Note from './components/Note'
-import noteService from './services/notes'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 import Footer from './components/Footer'
+import Togglable from './components/Togglable'
+import NoteForm from './components/NoteForm'
+import noteService from './services/notes'
 import loginService from './services/login'
 
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
+  const noteFormRef = useRef()
+  // useRef() return an object: {current: null}
 
   useEffect(() => {
     noteService
@@ -39,23 +41,13 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important === true)
 
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)  // event is the whole event of what just happened, event.target is the DOM element that intrigues the change/submit, here is the input
-  }
-
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-        content: newNote,
-        important: Math.random() < 0.5,
-    }
-
+  const createNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility()  // call the fn of sub component and change its state
     noteService
       .create(noteObject)
       .then(returnedNote => {
         setNotes(notes.concat(returnedNote))
-        setNewNote('')
+        
       })
 
   }
@@ -69,7 +61,7 @@ const App = () => {
         .then(returnedNote => {
             setNotes(notes.map(note => note.id === id ? returnedNote : note)) //if node.id=id, return data from server; else return the original data in notes
         })
-        .catch(error => {
+        .catch(() => {
           setErrorMessage(
             `Note '${note.content}' was already removed from server`
           )
@@ -102,40 +94,24 @@ const App = () => {
   }
 
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}> 
-      <div>
-        <label>
-          username
-          <input
-            type="text"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)} 
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          password
-          <input
-            type="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </label>
-      </div>
-      <button type="submit">login</button>
-    </form>
-  )
+  const loginForm = () => {
+    return (
+      <Togglable buttonLabel='login'>
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+        />
+      </Togglable>
+    )
+  }
 
   const noteForm = () => (
-    <form onSubmit={addNote}>          {/* React automatically creates en event object representing the whole action, and call addNote(event) */}
-      <input 
-        value={newNote}
-        onChange={handleNoteChange}
-      />
-      <button type="submit">save</button>
-    </form> 
+    <Togglable buttonLabel="new note" ref={noteFormRef}>  {/* noteFormRef reference to this element (Togglable) */}
+      <NoteForm createNote={createNote} />
+    </Togglable>
   )
 
   return (

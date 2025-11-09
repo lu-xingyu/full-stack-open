@@ -36,16 +36,11 @@ blogsRouter.delete('/:id', middleware.tokenExtractor, async (request, response) 
   response.status(204).end()
 })
 
-blogsRouter.put('/:id',  middleware.tokenExtractor, async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
-  const user = request.user
-  if (blog.user.toString() !== user._id.toString()) {
-    return response.status(401).json({error: "use is not permitted to delete this blog"})
-  }
-  const {title, author, url, likes} = request.body
+blogsRouter.put('/:id', async (request, response) => {
+  const {user, title, author, url, likes} = request.body
   const blogToUpdate = await Blog.findById(request.params.id)
   if (!blogToUpdate) {
-    return response.status(404)
+    return response.status(404).end()
   }
   blogToUpdate.title = title
   blogToUpdate.author = author

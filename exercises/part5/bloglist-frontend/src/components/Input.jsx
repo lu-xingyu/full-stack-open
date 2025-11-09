@@ -1,10 +1,10 @@
-const Input = ({text, diaplay, changeHandler}) => (
-    <div>
-        <label>
-            {text}
-            <input value={diaplay} onChange={({ target }) => changeHandler(target.value)}></input>
-        </label>
-    </div>
+const Input = ({ text, display, changeHandler }) => (
+  <div>
+    <label>
+      {text}
+      <input value={display} onChange={({ target }) => changeHandler(target.value)}></input>
+    </label>
+  </div>
 
 )
 
