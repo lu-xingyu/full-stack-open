@@ -11,5 +11,16 @@ export default defineConfig({
         changeOrigin: true,
       },
     }
-  }, 
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './testSetup.js', 
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+      include: ['src/**/*.jsx'],
+      all: true
+    }
+  } 
 })
