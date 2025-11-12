@@ -16,3 +16,11 @@ Content-Type: application/json
     "username": "goody goody",
     "password": "1111111"
 }
+###
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "Barney",
+    "password": "Roban"
+}

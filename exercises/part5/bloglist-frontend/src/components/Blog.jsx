@@ -16,7 +16,7 @@ const Blog = ({ blog, likesHandler, username, deleteHandler }) => {
   const showDelete = { display : username === blog.user.username ? '' : 'none' }
 
   return (
-    <div style={blogStyle}>
+    <li style={blogStyle}>
       <div>
         {blog.title} {blog.author}
         <button onClick={() => setView(!view)}>{label}</button>
@@ -27,7 +27,7 @@ const Blog = ({ blog, likesHandler, username, deleteHandler }) => {
         <div>{blog.user.username}</div>
         <button style={showDelete} onClick={() => deleteHandler(blog.id, blog.title, blog.author)}>remove</button>
       </div>
-    </div>
+    </li>
   )
 }
 
