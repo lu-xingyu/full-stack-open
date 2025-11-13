@@ -2,10 +2,10 @@ const User = require('../models/user')
 const Blog = require('../models/blog')
 const resetRouter = require('express').Router()
 
-resetRouter.post('/api/reset', async (request, response) => {
+resetRouter.post('/', async (request, response) => {
     await User.deleteMany({})
     await Blog.deleteMany({})
-    response.status(204).end()
+    response.status(200).json({ message: "successfully reseted" })
 })
 
 module.exports = resetRouter

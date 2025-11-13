@@ -13,7 +13,9 @@ const Blog = ({ blog, likesHandler, username, deleteHandler }) => {
 
   const label = view ? 'hide' : 'view'
   const trueDisplay = { display : view ? '' : 'none' }
+  console.log('username prop:', username, 'blog.user.username:', blog.user.username)
   const showDelete = { display : username === blog.user.username ? '' : 'none' }
+  console.log(showDelete)
 
   return (
     <li style={blogStyle}>
