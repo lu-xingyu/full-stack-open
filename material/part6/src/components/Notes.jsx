@@ -12,7 +12,15 @@ const Note = ({ note, handleClick }) => {
 
 const Notes = () => {
   const dispatch = useDispatch()
-  const notes = useSelector(state => state)
+  const notes = useSelector(({ filter, notes}) => {
+    if (filter === 'ALL') {
+      return notes
+    }
+    return filter === 'IMPORTANT'
+      ? notes.filter(note => note.important)
+      : notes.filter(note => !note.important)
+  })
+
   // get store.getState() fn of the store provided by Provider and filter desired state data
   // automatically subscribe store, iif the selected value has changed (by reference equality) will it trigger a re-render.
 
