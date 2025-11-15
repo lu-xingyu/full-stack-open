@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { createNote } from '../reducers/noteReducer'
+import { createNote } from '../reducers/noteToolkit'
 
 const NoteForm = () => {
   const dispatch = useDispatch() // get store.dispatch fn of the store provided by Provider

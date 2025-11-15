@@ -1,0 +1,23 @@
+import ReactDOM from 'react-dom/client'
+import { createStore, combineReducers } from 'redux'
+import { Provider } from 'react-redux'
+
+import App from './App'
+import filterReducer from './reducers/filterReducer'
+import noteReducer from './reducers/noteReducer'
+
+const reducer = combineReducers({
+  notes: noteReducer,
+  filter: filterReducer
+})
+
+const store = createStore(reducer)
+
+console.log(store.getState())
+
+// store property makes the store accessible to all components in the application
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
