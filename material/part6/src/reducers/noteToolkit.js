@@ -20,15 +20,10 @@ const generateId = () =>
 // name, initialState, reducers are prefined fixed name in createSlice
 const noteSlice = createSlice({
   name: 'notes',
-  initialState,  // shorthand when if the names of key and value are the same => initialState: initialState
+  initialState: [],  // shorthand when if the names of key and value are the same => initialState: initialState
   reducers: {
     createNote(state, action) {  // shorthand for functions => create: function (state, action) {...}
-      const content = action.payload
-      state.push({
-        content,
-        important: false,
-        id: generateId(),
-      })  
+      state.push(action.payload)
     },
     toggleImportanceOf(state, action) {
       const id = action.payload
@@ -41,13 +36,16 @@ const noteSlice = createSlice({
       return state.map(note =>
         note.id !== id ? note : changedNote 
       )     
+    },
+    setNotes(state, action) {
+      return action.payload
     }
   },
 })
 
 
 
-export const { createNote, toggleImportanceOf } = noteSlice.actions
+export const { createNote, toggleImportanceOf, setNotes } = noteSlice.actions
 export default noteSlice.reducer
 /* createSlice returns an object containing the reducer and action creators.
    the reducer can be accessed by the noteSlice.reducer property

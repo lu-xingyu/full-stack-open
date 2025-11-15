@@ -1,8 +1,19 @@
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import NoteForm from './components/NoteForm'
 import Notes from './components/Notes'
 import VisibilityFilter from './components/VisibilityFilter'
+import { setNotes } from './reducers/noteReducer'
+import noteService from './services/notes'
 
 const App = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    noteService.getAll().then(notes => dispatch(setNotes(notes)))
+  }, [dispatch])  
+  // good programming practice: add all variables and functions used inside the useEffect hook 
+  // that are defined within the component to the dependency array
 
   return (
     <div>
