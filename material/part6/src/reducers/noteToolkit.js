@@ -1,4 +1,5 @@
 import { createSlice, current } from '@reduxjs/toolkit'
+import noteService from '../services/notes'
 
 const initialState = [
   {
@@ -43,9 +44,25 @@ const noteSlice = createSlice({
   },
 })
 
+const { createNote, setNotes } = noteSlice.actions
 
+// reducers can only contain syncronous pure function, so initializeNote nust be written ouside
+// it returns a function as the action, whn dispatch receive a function, it will just execute it
+export const initializeNotes = () => {
+  return async (dispatch) => {
+    const notes = await noteService.getAll()
+    dispatch(setNotes(notes))
+  }
+}
 
-export const { createNote, toggleImportanceOf, setNotes } = noteSlice.actions
+export const appendNote = (content) => {
+  return async (dispatch) => {
+    const newNote = await noteService.createNew(content)
+    dispatch(createNote(newNote))
+  }
+}
+
+export const { toggleImportanceOf } = noteSlice.actions
 export default noteSlice.reducer
 /* createSlice returns an object containing the reducer and action creators.
    the reducer can be accessed by the noteSlice.reducer property

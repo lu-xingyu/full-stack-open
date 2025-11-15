@@ -22,9 +22,28 @@ const createNew = async (content) => {
 
     const response = await fetch(baseUrl, config)
     if (!response.ok) {
-        throw new Error('Failed to create note')
+        throw new Error('Failed to create anecdote')
     }
 
     return await response.json()
 }
-export { getAll, createNew }
+
+const vote = async (anecdote) => {
+    const config = {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            id: anecdote.id,
+            content: anecdote.content,
+            votes: anecdote.votes + 1
+        })
+    }
+
+    const response = await fetch(`${baseUrl}/${anecdote.id}`, config)
+    if (!response.ok) {
+        throw new Error('Failed to vote anecdote')
+    }
+
+    return await response.json()
+}
+export { getAll, createNew, vote }
