@@ -19,10 +19,11 @@ export const createAnecdote = async (newAnecdote) => {
     }
 
     const response = await fetch(baseUrl, config)
+    const body = await response.json()
     if (!response.ok) {
-        throw new Error('create anecdote failed')
+        throw new Error(body.error)
     }
-    return await response.json()
+    return body
 }
 
 export const voteAnecdote = async (anecdote) => {
@@ -32,8 +33,9 @@ export const voteAnecdote = async (anecdote) => {
         body: JSON.stringify({...anecdote, votes : anecdote.votes + 1})
     }
     const response = await fetch(`${baseUrl}/${anecdote.id}`, config)
+    const body = await response.json()
     if (!response.ok) {
-        throw new Error('vote anecdote failed')
+        throw new Error(body.error)
     }
-    return await response.json()
+    return body
 }
