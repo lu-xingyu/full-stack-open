@@ -82,9 +82,6 @@ const CreateNew = (props) => {
   const content = useField('content', '')
   const author = useField('author', '')
   const info = useField('info', '')
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
 
   const navigate = useNavigate()
 
@@ -114,7 +111,7 @@ const CreateNew = (props) => {
         </div>
         <div>
           url for more info
-          <input name={info.type} value={info.value} onChange={(e)=> setInfo(e.target.value)} />
+          <input name={info.type} value={info.value} onChange={(e)=> info.set(e.target.value)} />
         </div>
         <button>create</button>
       </form>
