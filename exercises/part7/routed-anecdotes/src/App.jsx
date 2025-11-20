@@ -130,9 +130,11 @@ const App = () => {
     <h1>Software anecdotes</h1>
     <Router>
       <Menu />
-      <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
-      <Route path="/create" element={<CreateNew addNew={addNew} />} />
-      <Route path="/about" element={<About />} /}
+      <Routes>
+        <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
+        <Route path="/create" element={<CreateNew addNew={addNew} />} />
+        <Route path="/about" element={<About />} /} />
+      </Routes>
       <Footer />
     </Router>
   )
