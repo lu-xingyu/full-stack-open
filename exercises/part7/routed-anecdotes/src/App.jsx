@@ -120,7 +120,7 @@ const CreateNew = (props) => {
 }
 
 const App = () => {
-  const [anecdotes, setAnecdotes] = useState([
+  const anecdotes = useField('anecdotes', [
     {
       content: 'If it hurts, do it more often',
       author: 'Jez Humble',
@@ -137,16 +137,19 @@ const App = () => {
     }
   ])
 
+  const notification = useField('notification', '')
+  const [anecdotes, setAnecdotes] = useState()
+
   const [notification, setNotification] = useState('')
 
 
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
-    setAnecdotes(anecdotes.concat(anecdote))
-    setNotification(`a new anecdote ${anecdote.content} created!`)
+    anecdotes.set(anecdotes.concat(anecdote))
+    notification.set(`a new anecdote ${anecdote.content} created!`)
     setTimeout(() => {
-      setNotification(null)
+      notification.set('')
       }, 5000
     )
   }
@@ -162,7 +165,7 @@ const App = () => {
       votes: anecdote.votes + 1
     }
 
-    setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
+    anecdotes.set(anecdotes.map(a => a.id === id ? voted : a))
   }
 
   return (
