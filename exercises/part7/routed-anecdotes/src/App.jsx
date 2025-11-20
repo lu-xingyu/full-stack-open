@@ -38,7 +38,7 @@ const Anecdote = ({ anecdotes }) => {
 
   return (
     <div>
-      <h2>{anecdote.contennt}</h2>
+      <h2>{anecdote.content}</h2>
       <p>has {anecdote.votes} votes</p>
       <p>for more info see {anecdote.info}</p>
     </div>
@@ -153,7 +153,7 @@ const App = () => {
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path="/create" element={<CreateNew addNew={addNew} />} />
         <Route path="/about" element={<About />} />
-        <Route path="anecdotes/:id" element={<Anecdote />} />
+        <Route path="anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />} />
       </Routes>
       <Footer />
     </Router>
