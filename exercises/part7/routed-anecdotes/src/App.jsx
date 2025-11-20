@@ -80,7 +80,6 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-  const [message, setMessage] = useState(null)
 
 
   const handleSubmit = (e) => {
@@ -91,7 +90,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
-    
+
   }
 
   return (
