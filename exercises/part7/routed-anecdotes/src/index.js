@@ -12,10 +12,12 @@ const useField = (type, name) => {
   }
 
   return {
-    type,
-    name,
-    value,
-    onChange,
+    input: {
+        type,
+        name,
+        value,
+        onChange,
+    },
     reset
   }
 }
