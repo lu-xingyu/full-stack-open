@@ -120,7 +120,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
-        <button onClick={resetForm}>reset</button>
+        <button type='button' onClick={resetForm}>reset</button>
       </form>
     </div>
   )
