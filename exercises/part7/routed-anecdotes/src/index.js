@@ -6,8 +6,12 @@ const useField = (initial) => {
     const onChange = (newValue) => {
         setValue(newValue)
     }
+
+    return {
+        value,
+        onChange
+    }
 }
 
-export default {
-    value, onChange
-}
+
+export default useField
