@@ -114,6 +114,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button>reset</button>
       </form>
     </div>
   )
