@@ -97,6 +97,12 @@ const CreateNew = (props) => {
     // leave CreateNew, the component is unmounted; when remount this component, the state will be automatically reset to initial
   }
 
+  const reset = () => {
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -114,7 +120,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
-        <button>reset</button>
+        <button onClick={reset}>reset</button>
       </form>
     </div>
   )
