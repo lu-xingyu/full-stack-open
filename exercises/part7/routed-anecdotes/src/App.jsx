@@ -18,6 +18,15 @@ const Menu = () => {
   )
 }
 
+const Message = ({ msg }) => {
+  if (!msg) {
+    return null
+  }
+  return (
+    <p>{msg}</p>
+  )
+}
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
@@ -150,6 +159,7 @@ const App = () => {
     <Router>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Message msg={message}/>
       <Routes>
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path="/create" element={<CreateNew addNew={addNew} />} />
