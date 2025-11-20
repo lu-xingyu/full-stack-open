@@ -97,7 +97,7 @@ const CreateNew = (props) => {
     // leave CreateNew, the component is unmounted; when remount this component, the state will be automatically reset to initial
   }
 
-  const reset = () => {
+  const resetForm = () => {
     content.reset()
     author.reset()
     info.reset()
@@ -120,7 +120,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
-        <button onClick={reset}>reset</button>
+        <button onClick={resetForm}>reset</button>
       </form>
     </div>
   )
