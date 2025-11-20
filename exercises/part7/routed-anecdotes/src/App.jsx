@@ -93,6 +93,7 @@ const CreateNew = (props) => {
       votes: 0
     })
     navigate("/")
+    // leave CreateNew, the component is unmounted; when remount this component, the state will be automatically reset to initial
   }
 
   return (
