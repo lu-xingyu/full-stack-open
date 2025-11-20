@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, useMatch
+  Routes, Route, Link,
+  useMatch
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -29,7 +30,7 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 )
 
-const Anecdote = () => {
+const Anecdote = ({ anecdotes }) => {
   const match = useMatch('anecdotes/:id')
   const anecdote = match
     ? anecdotes.find(anecdote => anecdote.id === Number(match.params.id))
