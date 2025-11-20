@@ -79,9 +79,9 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const content = useField('content', '')
-  const author = useField('author', '')
-  const info = useField('info', '')
+  const content = useField('content')
+  const author = useField('author')
+  const info = useField('info')
 
   const navigate = useNavigate()
 
@@ -120,7 +120,8 @@ const CreateNew = (props) => {
 }
 
 const App = () => {
-  const anecdotes = useField('anecdotes', [
+
+  const [anecdotes, setAnecdotes] = useState( [
     {
       content: 'If it hurts, do it more often',
       author: 'Jez Humble',
@@ -137,19 +138,16 @@ const App = () => {
     }
   ])
 
-  const notification = useField('notification', '')
-  const [anecdotes, setAnecdotes] = useState()
-
   const [notification, setNotification] = useState('')
 
 
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
-    anecdotes.set(anecdotes.concat(anecdote))
-    notification.set(`a new anecdote ${anecdote.content} created!`)
+    setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} created!`)
     setTimeout(() => {
-      notification.set('')
+      setNotification(null)
       }, 5000
     )
   }
@@ -165,7 +163,7 @@ const App = () => {
       votes: anecdote.votes + 1
     }
 
-    anecdotes.set(anecdotes.map(a => a.id === id ? voted : a))
+    setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
   return (
