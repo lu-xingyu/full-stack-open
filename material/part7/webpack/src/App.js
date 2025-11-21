@@ -4,7 +4,7 @@ import './index.css'
 const App = () => {
   const [counter, setCounter] = useState(0)
 
-  const [values, setValues] = useState()
+  const [values, setValues] = useState([])
 
 
   const handleClick = () => {
