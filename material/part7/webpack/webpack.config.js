@@ -8,7 +8,7 @@ const config = (env, argv) => {
 
   const backend_url = argv.mode === 'production'
     ? 'https://notes2023.fly.dev/api/notes'
-    : 'http://localhost:3001/notes'
+    : 'https://orange-goldfish-5gx9x65qv5g62vq9-3001.app.github.dev/notes'
 
   return {
     entry: './src/index.js',   // entry of the whole application
