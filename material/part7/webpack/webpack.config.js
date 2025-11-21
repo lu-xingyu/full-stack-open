@@ -15,9 +15,14 @@ const config = () => {
       port: 3000,
       host: '0.0.0.0',
       client: {
-        webSocketURL: 'auto',
+        webSocketURL: {
+          protocol: 'wss',
+          hostname: window.location.hostname,
+          port: window.location.port,
+          pathname: '/ws',
+        },
       },
-      hot: true
+      hot: false
     },
     module: {
       rules: [
