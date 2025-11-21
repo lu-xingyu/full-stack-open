@@ -13,7 +13,6 @@ const config = () => {
       static: path.resolve(__dirname, 'build'),  // read static files from disk (index.html, png, fnot..), store and read bundled main.js in memory instead of disk, monitor src folder, rebundle when it changes
       compress: true,
       port: 3000,
-      host: '0.0.0.0',
       client: {
         webSocketURL: {
           protocol: 'wss',  // 使用加密 WebSocket，因为页面是 https://
