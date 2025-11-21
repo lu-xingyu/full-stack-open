@@ -29,14 +29,14 @@ const noteSlice = createSlice({
     toggleImportanceOf(state, action) {
       const id = action.payload
       const noteToChange = state.find(n => n.id === id)
-      const changedNote = { 
-        ...noteToChange, 
-        important: !noteToChange.important 
+      const changedNote = {
+        ...noteToChange,
+        important: !noteToChange.important
       }
       console.log(current(state))
       return state.map(note =>
-        note.id !== id ? note : changedNote 
-      )     
+        note.id !== id ? note : changedNote
+      )
     },
     setNotes(state, action) {
       return action.payload
@@ -47,7 +47,7 @@ const noteSlice = createSlice({
 const { createNote, setNotes } = noteSlice.actions
 
 // reducers can only contain syncronous pure function, so initializeNote nust be written ouside
-// it returns a function as the action, whn dispatch receive a function, it will just execute it
+// it returns a function as the action, when dispatch receive a function, it will just execute it
 export const initializeNotes = () => {
   return async (dispatch) => {
     const notes = await noteService.getAll()
