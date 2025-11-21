@@ -14,15 +14,8 @@ const config = () => {
       compress: true,
       port: 3000,
       host: '0.0.0.0',
-      client: {
-        webSocketURL: {
-          protocol: 'wss',
-          hostname: window.location.hostname,
-          port: window.location.port,
-          pathname: '/ws',
-        },
-      },
-      hot: false
+      hot: false,
+      liveReload: false
     },
     module: {
       rules: [
