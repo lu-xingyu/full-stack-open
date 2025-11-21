@@ -15,7 +15,7 @@ const config = () => {
           test: /\.js$/,  // this loader is for files that have names ending with .js.
           loader: 'babel-loader',  // the processing for those files will be done with babel-loader
           options: {  // specifying parameters for the loader
-            presets: ['@babel/preset-react'],
+            presets: ['@babel/preset-react', '@babel/preset-react'],
           },
         },
       ],
