@@ -8,13 +8,13 @@ const config = () => {
     output: {
       path: path.resolve(__dirname, 'build'),  // where to put the bundled  file
       filename: 'main.js'  // the name of the bundled file
-    }
+    },
     module: {
       rules: [
         {
           test: /\.js$/,  // this loader is for files that have names ending with .js.
           loader: 'babel-loader',  // the processing for those files will be done with babel-loader
-          options: {
+          options: {  // specifying parameters for the loader
             presets: ['@babel/preset-react'],
           },
         },
