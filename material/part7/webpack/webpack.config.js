@@ -9,6 +9,17 @@ const config = () => {
       path: path.resolve(__dirname, 'build'),  // where to put the bundled  file
       filename: 'main.js'  // the name of the bundled file
     }
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-react'],
+          },
+        },
+      ],
+    },
   }
 }
 
