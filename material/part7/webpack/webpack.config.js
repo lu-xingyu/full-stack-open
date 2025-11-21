@@ -14,9 +14,14 @@ const config = () => {
       compress: true,
       port: 3000,
       host: '0.0.0.0',
-      hot: false,
-      liveReload: false,
-      allowedHosts: 'all'
+      client: {
+        webSocketURL: {
+          protocol: 'wss',  // 使用加密 WebSocket，因为页面是 https://
+          hostname: 'orange-goldfish-5gx9x65qv5g62vq9-3000.app.github.dev',
+          port: 443,        // 外部浏览器访问 HTTPS 默认端口
+          pathname: '/ws',
+        },
+      }
     },
     module: {
       rules: [
