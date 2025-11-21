@@ -1,9 +1,15 @@
 // Webpack will automatically find webpack.config.js and execute the content of module.exports
 
 const path = require('path')
+const webpack = require('webpack')
 
 const config = (env, argv) => {
   console.log('argv.mode:', argv.mode)
+
+  const backend_url = argv.mode === 'production'
+    ? 'https://notes2023.fly.dev/api/notes'
+    : 'http://localhost:3001/notes'
+
   return {
     entry: './src/index.js',   // entry of the whole application
     output: {
@@ -39,6 +45,11 @@ const config = (env, argv) => {
         },
       ],
     },
+    plugins: [
+      new webpack.DefinePlugin({
+        BACKEND_URL: JSON.stringify(backend_url)
+      })
+    ]
   }
 }
 
