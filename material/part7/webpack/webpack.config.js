@@ -9,6 +9,11 @@ const config = () => {
       path: path.resolve(__dirname, 'build'),  // where to put the bundled  file
       filename: 'main.js'  // the name of the bundled file
     },
+    devServer: {
+      static: path.resolve(__dirname, 'build'),
+      compress: true,
+      port: 3000,
+    },
     module: {
       rules: [
         {
