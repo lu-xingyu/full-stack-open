@@ -2,7 +2,8 @@
 
 const path = require('path')
 
-const config = () => {
+const config = (env, argv) => {
+  console.log('argv.mode:', argv.mode)
   return {
     entry: './src/index.js',   // entry of the whole application
     output: {
