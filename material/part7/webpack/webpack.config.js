@@ -10,7 +10,7 @@ const config = () => {
       filename: 'main.js'  // the name of the bundled file
     },
     devServer: {
-      static: path.resolve(__dirname, 'build'),
+      static: path.resolve(__dirname, 'build'),  // read static files from disk (index.html, png, fnot..), store and read bundled main.js in memory instead of disk, monitor src folder, rebundle when it changes
       compress: true,
       port: 3000,
     },
