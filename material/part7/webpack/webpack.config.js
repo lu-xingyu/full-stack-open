@@ -20,7 +20,7 @@ const config = () => {
         },
         {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader'],  //  css-loader: to load the CSS files; style-loader: generate and inject a style element to the application
         },
       ],
     },
