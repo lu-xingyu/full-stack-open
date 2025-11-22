@@ -4,7 +4,8 @@ const baseUrl = '/api/blogs'
 let token = null
 
 const setToken = (newToken) => {
-  token = `Bearer ${newToken}`
+  const loggedUser= JSON.parse(localStorage.getItem('loggedUser'))
+  token = `Bearer ${loggedUser.token}`
 }
 
 const getAll = () => {

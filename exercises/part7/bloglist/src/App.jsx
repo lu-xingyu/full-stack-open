@@ -1,111 +1,53 @@
-import { useState, useEffect, useRef } from 'react'
-import LoginState from './components/LoginState'
-import Blogs from './components/Blogs'
-import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
-import Notification from './components/Notification'
-import blogService from './services/blogs'
-import loginService from './services/login'
-import Togglable from './components/Togglable'
-
-import { initializeBlogs } from './reducers/blogsReducer'
+import { useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import {BrowserRouter as Router, 
+  Routes, Route, Link,
+  Navigate
+} from 'react-router-dom'
+import LoginState from './components/LoginState'
+import Users from './components/Users'
+import Home from './components/Home'
+import SpecificUser from './components/SpecificUser'
+import Blog from './components/Blog'
+import { initializeBlogs } from './reducers/blogsReducer'
+import { setUser } from './reducers/loginUserReducer'
+import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-  const blogFormRef = useRef()
-
+  const loginUser = useSelector(state => state.loginUser)
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if(loggedUserJSON) {
       const loggedUser = JSON.parse(loggedUserJSON)
-      setUser(loggedUser)
+      dispatch(setUser(loggedUser))
     }
-  }, [])
+  }, [dispatch])
 
-  const loginHandler = async (event) => {
-    event.preventDefault()
-    try {
-      const returnedUser = await loginService.login({ username, password })
-      setUser(returnedUser)
-      blogService.setToken(returnedUser.token)
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(returnedUser)
-      )
-
-      setUsername('')
-      setPassword('')
-    } catch (error) {
-      console.log(error)
-      dispatch(displayNoti({ message: 'wrong credentials', error: true }))
-    }
+  const padding = {
+    padding: 5
   }
-
-  const logoutHandler = () => {
-    window.localStorage.removeItem('loggedUser')
-    setUser(null)
-  }
-
-  const plusLike = async (id, number) => {
-    const blogToLike = blogs.find(b => b.id === id)
-
-    const likedBlog = {
-      user: blogToLike.user.id,
-      likes: blogToLike.likes + number,
-      author: blogToLike.author,
-      title: blogToLike.title,
-      url: blogToLike.url
-    }
-    try {
-      await blogService.update(likedBlog, id)
-      blogToLike.likes = blogToLike.likes + number
-      const newBlogs = blogs.map(b => b.id !== id ?b : blogToLike)
-      setBlogs(newBlogs.sort((a, b) => b.likes - a.likes))
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const deleteHandler = async (id, title, author) => {
-    if (window.confirm(`Remove blog ${title} by ${author}`)) {
-      await blogService.remove(id)
-      setBlogs(blogs.filter(b => b.id !== id))
-    }
-  }
-
-  const showLogin = () => (
-    <div>
-      <LoginState username={user.username} logoutHandler={logoutHandler} />
-      <Togglable label="create new blog" ref={blogFormRef}>
-        <BlogForm togglableRef={blogFormRef} />
-      </Togglable>
-      <Blogs likesHandler={plusLike} username={user.username} deleteHandler={deleteHandler}/>
-    </div>
-  )
-
-  const showLogout = () => (
-    <LoginForm username={username} password={password} loginHandler={loginHandler}
-      setUsername={setUsername} setPassword={setPassword}
-    />
-  )
 
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
+    <Router>
       <div>
-        {!user && showLogout()}
-        {user && showLogin()}
+        <Link style={padding} to="/">home</Link>
+        <Link style={padding} to="/users">users</Link>
+        <LoginState  />
       </div>
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/users" element={ loginUser ? <Users /> : <Navigate replace to='/' />} />
+        <Route path="/users/:id" element={<SpecificUser />}  />
+        <Route path="/blogs/:id" element={<Blog />}  />
+      </Routes>
+    </Router>
   )
 }
 

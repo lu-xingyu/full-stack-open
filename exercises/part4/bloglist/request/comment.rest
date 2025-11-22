@@ -1,0 +1,7 @@
+POST http://localhost:5173/api/blogs/690e1a39e1dc33d0c147479d/comments
+Content-Type: application/json
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldmlsIGNoaWxkIiwiaWQiOiI2OTBlMTZkMzgzZmM2ZDcwN2YzNGE3ZDEiLCJpYXQiOjE3NjM4Mjg4OTB9.SHOGGKdmo0y1lj1GrgDSFU74NKRyu6DgjCx59JOuHwQ
+
+{
+    "comment": "i think so"
+}

@@ -13,15 +13,15 @@ const BlogForm = ({ togglableRef }) => {
 
   const createBlog = async (event) => {
     event.preventDefault()
-    const newBlog = {
+    const blogToAdd = {
       title: title,
       author: author,
       url: url
     }
 
     try {
-      dispatch(addBlog(newBlog))
-      dispatch(displayNoti({ message: `a new blog ${newBlog.title} by ${newBlog.author} added`, error: false }))
+      dispatch(addBlog(blogToAdd))
+      dispatch(displayNoti({ message: `a new blog ${blogToAdd.title} by ${blogToAdd.author} added`, error: false }))
       togglableRef.current.toggleVisibility()
     } catch (error) {
       console.log(error.message)

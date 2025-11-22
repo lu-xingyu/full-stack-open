@@ -1,5 +1,4 @@
-import { useSelector, useDispatch } from 'react-redux'
-import store from '../store'
+import { useSelector } from 'react-redux'
 
 const Notification = () => {
   const { message, error } = useSelector(state => state.notification)
