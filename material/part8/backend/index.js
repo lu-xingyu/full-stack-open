@@ -138,6 +138,10 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
   listen: { port: 4000 },
+  cors: {
+    origin: 'https://orange-goldfish-5gx9x65qv5g62vq9-5173.app.github.dev', // 你的前端地址
+    credentials: true, 
+  },
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`)
 })
