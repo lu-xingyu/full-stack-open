@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useMutation } from '@apollo/client/react'
+import {  ALL_PERSONS } from '../App.jsx'
 
 
 const CREATE_PERSON = gql`

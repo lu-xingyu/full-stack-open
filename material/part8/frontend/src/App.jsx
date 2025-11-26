@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client/react'
 import { useState } from 'react'
 import PersonForm from './components/PersonForm'
 
-const ALL_PERSONS = gql`
+export const ALL_PERSONS = gql`
   query {
     allPersons {
       name
