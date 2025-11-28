@@ -1,89 +1,53 @@
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
 import { useState } from 'react'
+import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
-
-export const ALL_PERSONS = gql`
-  query {
-    allPersons {
-      name
-      phone
-      id
-    }
-  }
-`
-
-const FIND_PERSON = gql`
-  query findPersonByName($nameToSearch: String!) {
-    findPerson(name: $nameToSearch) {
-      name
-      phone
-      id
-      address {
-        street
-        city
-      }
-    }
-  }
-`
-
-
-
-const Person = ({ person, onClose }) => {
-  return (
-    <div>
-      <h2>{person.name}</h2>
-      <div>
-        {person.address.street} {person.address.city}
-      </div>
-      <div>{person.phone}</div>
-      <button onClick={onClose}>close</button>
-    </div>
-  )
-}
-
-const Persons = ({ persons }) => {
-  const [nameToSearch, setNameToSearch] = useState(null)
-  const result = useQuery(FIND_PERSON, {
-    variables: { nameToSearch },
-    skip: !nameToSearch,
-  })
-
-  if (nameToSearch && result.data) {
-    return (
-      <Person
-        person={result.data.findPerson}
-        onClose={() => setNameToSearch(null)}
-      />
-    )
-  }
-
-  return (
-    <div>
-      <h2>Persons</h2>
-      {persons.map(p =>
-        <div key={p.name}>
-          {p.name} {p.phone}
-          <button onClick={() => setNameToSearch(p.name)}>
-            show address
-          </button>
-        </div>
-      )}
-      <PersonForm />
-    </div>
-  )
-}
-
+import PhoneForm from './components/PhoneForm'
+import Notify from './components/Notify'
+import LoginForm from './components/LoginForm'
+import { ALL_PERSONS } from './queries'
+import { useQuery, useApolloClient, useMutation} from '@apollo/client/react'
 
 const App = () => {
+  const [token, setToken] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
   const result = useQuery(ALL_PERSONS)
 
   if (result.loading) {
     return <div>loading...</div>
   }
 
+  const notify = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 10000)
+  }
+
+  const logout = () => {
+    setToken(null)
+    localStorage.clear()
+    client.resetStore()
+  }
+
+
+  if (!token) {
+    return (
+      <div>
+        <Notify errorMessage={errorMessage} />
+        <LoginForm setToken={setToken} setError={notify} />
+      </div>
+    )
+  }
+
   return (
-     <Persons persons={result.data.allPersons}/>
+    <>
+      <Notify errorMessage={errorMessage} />
+      <PersonForm setError={notify} />
+      <button onClick={logout}>logout</button>
+      <Persons persons={result.data.allPersons} />
+      <PhoneForm setError={notify} />
+    </>
   )
 }
 

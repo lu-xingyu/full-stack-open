@@ -9,12 +9,13 @@ const Authors = (props) => {
   const [selectedOption, setSelectedOption] = useState(null)
   const [born, setBorn] = useState('')
   const [ editBorn ] = useMutation(ADD_BORN, { refetchQueries: [ { query: ALL_AUTHORS } ] })
+  const result = useQuery(ALL_AUTHORS)
 
   if (!props.show) {
     return null
   }
 
-  const result = useQuery(ALL_AUTHORS)
+
   if (result.loading) {
     return <div>loading...</div>
   }

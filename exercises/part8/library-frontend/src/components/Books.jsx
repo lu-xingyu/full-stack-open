@@ -1,37 +1,24 @@
 import { ALL_BOOKS } from '../queries'
+import { useState } from "react";
 import { useQuery } from '@apollo/client/react'
+import BookTable from './BookTable'
 
 const Books = (props) => {
+  const [genre, setGenre] = useState('all genres')
   if (!props.show) {
     return null
   }
-  const result = useQuery(ALL_BOOKS)
-  if (result.loading) {
-    return <div>loading</div>
-  }
-
-  const books = result.data.allBooks
-
   return (
     <div>
       <h2>books</h2>
-
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books.map((a) => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author}</td>
-              <td>{a.published}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <BookTable genre={genre} />
+      <button type='button' onClick={() => setGenre('refactoring')}>refactoring</button>
+      <button type='button' onClick={() => setGenre('agile')}>agile</button>
+      <button type='button' onClick={() => setGenre('patterns')}>patterns</button>
+      <button type='button' onClick={() => setGenre('design')}>design</button>
+      <button type='button' onClick={() => setGenre('crime')}>crime</button>
+      <button type='button' onClick={() => setGenre('classic')}>classic</button>
+      <button type='button' onClick={() => setGenre('all genres')}>all genres</button>
     </div>
   )
 }

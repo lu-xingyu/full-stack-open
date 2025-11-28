@@ -1,29 +1,9 @@
 import { useState } from 'react'
-import { gql } from '@apollo/client'
+
 import { useMutation } from '@apollo/client/react'
-import {  ALL_PERSONS } from '../App.jsx'
+import { ALL_PERSONS, FIND_PERSON, CREATE_PERSON } from '../queries'
 
-
-const CREATE_PERSON = gql`
-mutation createPerson($name: String!, $street: String!, $city: String!, $phone: String) {
-  addPerson(
-    name: $name,
-    street: $street,
-    city: $city,
-    phone: $phone
-  ) {
-    name
-    phone
-    id
-    address {
-      street
-      city
-    }
-  }
-}
-`
-
-const PersonForm = () => {
+const PersonForm = ({ setError }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [street, setStreet] = useState('')
@@ -31,14 +11,23 @@ const PersonForm = () => {
 
 
   const [ createPerson ] = useMutation(CREATE_PERSON, {
-    refetchQueries: [{ query: ALL_PERSONS }]
+    onError: (error) => {
+      const messages = error.graphQLErrors.map(e => e.message).join('\n')
+      setError(messages)
+    },
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
+        return {
+          allPersons: allPersons.concat(response.data.addPerson),
+        }
+      })
+    },
   })  // only take the first element in returned array
 
   const submit = (event) => {
     event.preventDefault()
 
-
-    createPerson({  variables: { name, phone, street, city } })
+    createPerson({  variables: { name, street, city, phone: phone.length > 0 ? phone : undefined } })
 
     setName('')
     setPhone('')
