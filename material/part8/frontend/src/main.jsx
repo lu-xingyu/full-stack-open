@@ -1,9 +1,15 @@
 import ReactDOM from 'react-dom/client'
 import App from './App'
 
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client'
+import { ApolloClient, InMemoryCache, createHttpLink,
+  split
+} from '@apollo/client'
 import { ApolloProvider } from '@apollo/client/react'
 import { setContext } from '@apollo/client/link/context'
+
+import { getMainDefinition } from '@apollo/client/utilities'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { createClient } from 'graphql-ws'
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('phonenumbers-user-token')
@@ -20,12 +26,29 @@ const authLink = setContext((_, { headers }) => {
 // callback fn of setContext will be called before the request is sent, the return value is the new context
 
 const httpLink = createHttpLink({
-  uri: 'https://orange-goldfish-5gx9x65qv5g62vq9-4000.app.github.dev/',
+  uri: 'http://localhost:4000/',
 })
+
+
+const wsLink = new GraphQLWsLink(
+  createClient({ url: 'ws://localhost:4000' })
+)
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query)
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    )
+  },
+  wsLink,
+  authLink.concat(httpLink)
+)
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: authLink.concat(httpLink)
+  link: splitLink
 })
 
 
@@ -33,6 +56,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
   <ApolloProvider client={client}>
     <App />
-
   </ApolloProvider>
 )

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-
+import { updateCache } from '../App'
 import { useMutation } from '@apollo/client/react'
 import { ALL_PERSONS, FIND_PERSON, CREATE_PERSON } from '../queries'
 
@@ -16,11 +16,7 @@ const PersonForm = ({ setError }) => {
       setError(messages)
     },
     update: (cache, response) => {
-      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
-        return {
-          allPersons: allPersons.concat(response.data.addPerson),
-        }
-      })
+      updateCache(cache, { query: ALL_PERSONS }, response.data.addPerson)
     },
   })  // only take the first element in returned array
 

@@ -14,6 +14,24 @@ mutation {
   }
 }
 
+
+mutation {
+  addBook(
+    title: "Sunday",
+    author: "Esther Lou",
+    published: 1872,
+    genres: ["classic", "crime"]
+  ) {
+    title
+    published
+    author {
+      name,
+      born
+    }
+  }
+}
+
+
 mutation {
   editAuthor (
     name: "Sandi Metz",
