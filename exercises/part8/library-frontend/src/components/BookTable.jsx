@@ -1,17 +1,22 @@
-import { ALL_BOOKS } from '../queries'
+import { BOOK_BY_GENRE } from '../queries'
 import { useQuery } from '@apollo/client/react'
 
-const BookTable = ({ genre }) => {
-  const result = useQuery(ALL_BOOKS)
+const BookTable = ({ genreToQuery }) => {
+  const queryVar = 
+    genreToQuery === "all genres"
+    ? {}
+    : { genre: genreToQuery }
+
+  const result = useQuery(BOOK_BY_GENRE, {
+    variables: queryVar
+  })
+
 
   if (result.loading) {
     return <div>loading</div>
   }
 
   let books = result.data.allBooks
-  if (genre !== 'all genres') {
-    books = books.filter(b => b.genres.includes(genre))
-  }
 
   return (
     <table>

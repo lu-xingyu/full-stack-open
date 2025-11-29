@@ -13,9 +13,8 @@ const Recommend = ({ show }) => {
     return <div>loading</div>
   }
 
-  console.log(result)
   return (
-    <BookTable genre={result.data.me.favoriteGenre} />
+    <BookTable genreToQuery={result.data.me.favoriteGenre} />
   )
 }
 

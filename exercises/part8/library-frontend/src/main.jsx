@@ -18,7 +18,8 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const httpLink = createHttpLink({
-  uri: 'https://orange-goldfish-5gx9x65qv5g62vq9-4000.app.github.dev/'
+  // uri: 'https://orange-goldfish-5gx9x65qv5g62vq9-4000.app.github.dev/'
+  uri: 'http://localhost:4000/'
 })
 const client = new ApolloClient({
   link: authLink.concat(httpLink),

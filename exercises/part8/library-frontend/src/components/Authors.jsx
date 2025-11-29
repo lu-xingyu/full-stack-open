@@ -1,6 +1,6 @@
 import { ALL_AUTHORS, ADD_BORN } from '../queries'
 import { useQuery } from '@apollo/client/react'
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Select from 'react-select';
 import { useMutation } from '@apollo/client/react'
 

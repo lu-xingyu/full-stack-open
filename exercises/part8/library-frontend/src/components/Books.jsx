@@ -1,6 +1,4 @@
-import { ALL_BOOKS } from '../queries'
 import { useState } from "react";
-import { useQuery } from '@apollo/client/react'
 import BookTable from './BookTable'
 
 const Books = (props) => {
@@ -8,10 +6,11 @@ const Books = (props) => {
   if (!props.show) {
     return null
   }
+
   return (
     <div>
       <h2>books</h2>
-      <BookTable genre={genre} />
+      <BookTable key={genre} genreToQuery={genre} />
       <button type='button' onClick={() => setGenre('refactoring')}>refactoring</button>
       <button type='button' onClick={() => setGenre('agile')}>agile</button>
       <button type='button' onClick={() => setGenre('patterns')}>patterns</button>
