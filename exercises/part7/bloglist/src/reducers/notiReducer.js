@@ -9,8 +9,8 @@ const notiSlice = createSlice({
     },
     resetNoti(state, action) {
       return { message: null, error: false }
-    }
-  }
+    },
+  },
 })
 
 const { setNoti, resetNoti } = notiSlice.actions
@@ -25,4 +25,3 @@ export const displayNoti = (noti) => {
 }
 
 export default notiSlice.reducer
-

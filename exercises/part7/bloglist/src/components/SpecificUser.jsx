@@ -3,24 +3,20 @@ import { useMatch } from 'react-router-dom'
 
 const SpecificUser = () => {
   const match = useMatch('/users/:id')
-  const users = useSelector(state => state.users)
+  const users = useSelector((state) => state.users)
 
-  const user = match 
-    ? users.find(user => user.id === match.params.id)
-    : null
+  const user = match ? users.find((user) => user.id === match.params.id) : null
 
   if (!user) {
-    return (
-      <div>loading user</div>
-    )
-  } 
+    return <div>loading user</div>
+  }
 
   return (
     <div>
       <h2>{user.username}</h2>
       <h3>added blogs</h3>
       <ul>
-        {user.blogs.map(b => (
+        {user.blogs.map((b) => (
           <li key={b.id}>{b.title}</li>
         ))}
       </ul>

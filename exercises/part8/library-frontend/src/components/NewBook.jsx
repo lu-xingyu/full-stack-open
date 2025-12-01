@@ -18,10 +18,10 @@ const NewBook = (props) => {
         { query: ALL_AUTHORS },
         ...genreQueries
       ]
-    } 
+    }
   } */
   )
-    
+
 
   if (!props.show) {
     return null
@@ -31,7 +31,6 @@ const NewBook = (props) => {
     event.preventDefault()
 
     createNewBook({ variables: { title, author, published: Number(published), genres } })
-    window.alert(`new book: ${title} added`)
 
     setTitle('')
     setPublished('')

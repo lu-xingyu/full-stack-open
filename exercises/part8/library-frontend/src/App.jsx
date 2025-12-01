@@ -33,6 +33,7 @@ const App = () => {
     onData: ({ data, client }) => {
       console.log("subscription data:", data)
       const addedBook = data.data.bookAdded
+      window.alert(`new book: ${addedBook.title} added`)
       updateCache(client.cache, {query: ALL_BOOKS }, addedBook)
       for (const g of addedBook.genres) {
         updateCache(client.cache, { query: BOOK_BY_GENRE, variables: {genre: g}}, addedBook)
@@ -40,7 +41,7 @@ const App = () => {
     }
   })
 
-  
+
   const logout = () => {
     setToken(null)
     localStorage.clear()

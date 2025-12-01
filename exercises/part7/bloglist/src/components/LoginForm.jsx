@@ -1,5 +1,5 @@
 import Input from './Input'
-import { useState  } from 'react'
+import { useState } from 'react'
 import { setUser } from '../reducers/loginUserReducer'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
@@ -16,9 +16,7 @@ const LoginForm = () => {
       const returnedUser = await loginService.login({ username, password })
       dispatch(setUser(returnedUser))
       blogService.setToken(returnedUser.token)
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(returnedUser)
-      )
+      window.localStorage.setItem('loggedUser', JSON.stringify(returnedUser))
 
       setUsername('')
       setPassword('')
@@ -31,8 +29,8 @@ const LoginForm = () => {
     <div>
       <h2>log in to application</h2>
       <form onSubmit={(event) => loginHandler(event)}>
-        <Input text="username" display={username} changeHandler={setUsername} />
-        <Input text="password" display={password} changeHandler={setPassword} />
+        <Input text='username' display={username} changeHandler={setUsername} />
+        <Input text='password' display={password} changeHandler={setPassword} />
         <button type='submit'>login</button>
       </form>
     </div>

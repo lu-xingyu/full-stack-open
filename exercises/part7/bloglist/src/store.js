@@ -8,9 +8,9 @@ const store = configureStore({
   reducer: {
     notification: notiReducer,
     blogs: blogsReducer,
-    loginUser:loginUserReducer,
-    users: usersReducer
-  }
+    loginUser: loginUserReducer,
+    users: usersReducer,
+  },
 })
 
 export default store

@@ -24,15 +24,19 @@ const resolvers = {
 
       return Book.find(filter).populate('author')
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => {
+      const authors = await Author.find({})
+      const result = authors.map((author) => {
+        const  {books, ...rest} = author.toObject()
+        return {
+          ...rest,
+          bookCount: books.length
+        }
+      })
+      return result
+    },
     me: async (root, args, context) => {
       return context.currentUser
-    }
-  },
-
-  Author: {
-    bookCount: async (root) => {
-      return Book.countDocuments({ author: root.id})
     }
   },
 
@@ -57,7 +61,7 @@ const resolvers = {
         }
       }
 
-      const newBook = new Book({...args, author: authorOfBook._id})
+      const newBook = new Book({...args, author: authorOfBook._id, books: []})
 
       try {
         await newBook.save()
@@ -71,9 +75,17 @@ const resolvers = {
         })
       }
 
-      pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
+      if (!authorOfBook.books) {
+        authorOfBook.books = []
+      }
 
-      return newBook.populate('author')
+      authorOfBook.books.push(newBook._id)
+      await authorOfBook.save()
+      const populatedBook = await newBook.populate('author')
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
+
+      return populatedBook
     },
 
     editAuthor: async (root, args, context) => {

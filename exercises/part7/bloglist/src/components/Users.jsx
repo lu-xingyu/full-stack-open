@@ -2,11 +2,9 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const Users = () => {
-  const allUsers = useSelector(state => state.users)
+  const allUsers = useSelector((state) => state.users)
   if (allUsers.length === 0) {
-    return (
-      <div>loading users</div>
-    )
+    return <div>loading users</div>
   }
   return (
     <div>
@@ -19,14 +17,14 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {allUsers.map(user => 
+          {allUsers.map((user) => (
             <tr key={user.id}>
               <td>
                 <Link to={`/users/${user.id}`}>{user.username}</Link>
               </td>
               <td>{user.blogs.length}</td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     </div>

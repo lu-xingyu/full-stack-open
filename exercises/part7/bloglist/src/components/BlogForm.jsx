@@ -16,12 +16,17 @@ const BlogForm = ({ togglableRef }) => {
     const blogToAdd = {
       title: title,
       author: author,
-      url: url
+      url: url,
     }
 
     try {
       dispatch(addBlog(blogToAdd))
-      dispatch(displayNoti({ message: `a new blog ${blogToAdd.title} by ${blogToAdd.author} added`, error: false }))
+      dispatch(
+        displayNoti({
+          message: `a new blog ${blogToAdd.title} by ${blogToAdd.author} added`,
+          error: false,
+        }),
+      )
       togglableRef.current.toggleVisibility()
     } catch (error) {
       console.log(error.message)
@@ -37,9 +42,9 @@ const BlogForm = ({ togglableRef }) => {
     <div>
       <h2>create new</h2>
       <form onSubmit={(event) => createBlog(event)}>
-        <Input text="title: " display={title} changeHandler={setTitle} />
-        <Input text="author: " display={author} changeHandler={setAuthor} />
-        <Input text="url: " display={url} changeHandler={setUrl} />
+        <Input text='title: ' display={title} changeHandler={setTitle} />
+        <Input text='author: ' display={author} changeHandler={setAuthor} />
+        <Input text='url: ' display={url} changeHandler={setUrl} />
         <button type='submit'>create</button>
       </form>
     </div>

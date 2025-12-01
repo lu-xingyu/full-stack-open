@@ -41,7 +41,17 @@ const start = async () => {
   })
 
   const schema = makeExecutableSchema({ typeDefs, resolvers })
-  const serverCleanup = useServer({ schema }, wsServer)
+  const serverCleanup = useServer({
+    schema,
+    context: async (ctx) => {
+      const token = ctx.connectionParams?.authToken
+      if (!token) return {}
+      const decoded = jwt.verify(token, process.env.JWT_SECRET)
+      const currentUser = await User.findById(decoded.id)
+      return { currentUser }
+    }
+  }, wsServer)
+
   const server = new ApolloServer({
     schema,
     plugins: [
@@ -79,7 +89,7 @@ const start = async () => {
   )
 
   const PORT = 4000
-  httpServer.listen(PORT, () => 
+  httpServer.listen(PORT, () =>
   console.log(`Server is now running on http://localhost:${PORT}`))
 }
 

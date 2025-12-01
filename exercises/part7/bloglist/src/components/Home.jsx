@@ -8,20 +8,18 @@ import Togglable from './Togglable'
 
 const Home = () => {
   const blogFormRef = useRef()
-  const user = useSelector(state => state.loginUser)
+  const user = useSelector((state) => state.loginUser)
 
   const showLogin = () => (
     <div>
-    <Togglable label="create new blog" ref={blogFormRef}>
+      <Togglable label='create new blog' ref={blogFormRef}>
         <BlogForm togglableRef={blogFormRef} />
-    </Togglable>
-    <Blogs />
+      </Togglable>
+      <Blogs />
     </div>
   )
 
-  const showLogout = () => (
-    <LoginForm />
-  )
+  const showLogout = () => <LoginForm />
 
   return (
     <div>

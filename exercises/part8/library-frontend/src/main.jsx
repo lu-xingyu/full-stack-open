@@ -23,12 +23,28 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const httpLink = createHttpLink({
-  // uri: 'https://orange-goldfish-5gx9x65qv5g62vq9-4000.app.github.dev/'
-  uri: 'http://localhost:4000/'
+  uri: 'https://orange-goldfish-5gx9x65qv5g62vq9-4000.app.github.dev/'
+  // uri: 'http://localhost:4000/'
 })
 
 const wsLink = new GraphQLWsLink(
-  createClient({ url: 'ws://localhost:4000/' })
+  createClient({
+    url: 'wss://orange-goldfish-5gx9x65qv5g62vq9-4000.app.github.dev/',
+    on: {
+      connected: () => {
+        console.log('WebSocket connected');
+      },
+      closed: (event) => {
+        console.log('WebSocket closed', event);
+      },
+      error: (err) => {
+        console.error('WebSocket failed', err);
+      }
+    },
+    connectionParams: {
+      authToken: localStorage.getItem('library-user-token')
+    }
+  })
 )
 
 const splitLink = split(

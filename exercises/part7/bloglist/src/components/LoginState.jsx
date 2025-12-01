@@ -3,7 +3,7 @@ import { setUser } from '../reducers/loginUserReducer'
 
 const LoginState = () => {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.loginUser)
+  const user = useSelector((state) => state.loginUser)
 
   if (!user) {
     return null
@@ -17,7 +17,9 @@ const LoginState = () => {
   return (
     <span>
       {user.username} logged in
-      <button type='button' onClick={logoutHandler}>logout</button>
+      <button type='button' onClick={logoutHandler}>
+        logout
+      </button>
     </span>
   )
 }
